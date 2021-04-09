@@ -1,0 +1,40 @@
+body {
+    font-family: Calibri, sans-serif;
+    padding: 8em;
+}
+.matches-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.match-card {
+    /* padding: 2rem; */
+    border: 1px solid black;
+    margin: 1rem;
+}
+
+.competition-title-container {
+    padding: .6rem;
+    background-color: blue;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+}
+.competition-title {
+    font-weight: bolder;
+}
+
+.teams-container {
+    display: flex;
+    align-items: baseline;
+}
+.team {
+    padding: 1rem;
+}
+
+.parts-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-top: 1px solid;
+    background-color: cyan;
+}
