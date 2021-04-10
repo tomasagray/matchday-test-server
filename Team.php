@@ -2,10 +2,12 @@
 namespace matchday;
 
 
+use DateTime;
 use JsonSerializable;
 
 class Team implements JsonSerializable
 {
+    private string $teamId;
     private string $name;
 
     /**
@@ -14,7 +16,16 @@ class Team implements JsonSerializable
      */
     public function __construct(string $name)
     {
+        $this->teamId = md5(date_format(new DateTime(), 'c') . $name);
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTeamId(): string
+    {
+        return $this->teamId;
     }
 
     /**
