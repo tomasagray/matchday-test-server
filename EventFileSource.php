@@ -15,6 +15,7 @@ class EventFileSource implements JsonSerializable
 
     private string $eventFileSrcId;
     private array $eventFiles;
+    private int $fileSize;
 
     /**
      * EventFileSource constructor.
@@ -44,6 +45,22 @@ class EventFileSource implements JsonSerializable
     public function getEventFiles(): array
     {
         return $this->eventFiles;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFileSize(): int
+    {
+        return $this->fileSize;
+    }
+
+    /**
+     * @param int $fileSize
+     */
+    public function setFileSize(int $fileSize): void
+    {
+        $this->fileSize = $fileSize;
     }
 
     /**

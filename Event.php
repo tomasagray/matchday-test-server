@@ -7,15 +7,30 @@ require_once 'JsonDateTime.php';
 
 use DateTime;
 use Exception;
+use FilesystemIterator;
 use JsonSerializable;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 function get_url_path($file_path): string
 {
     $pathinfo = pathinfo(realpath(__FILE__));
     $path_root = $pathinfo['dirname'];
     $path = str_replace(array($path_root, DIRECTORY_SEPARATOR), array('', '/'), $file_path);
-    $url = $_SERVER['REQUEST_SCHEME'].'://' . $_SERVER['SERVER_NAME'] . $_SERVER['CONTEXT_PREFIX'];
-    return $url.$path;
+    $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['CONTEXT_PREFIX'];
+    return $url . $path;
+}
+
+function get_dir_size($real_path): int
+{
+    $bytesTotal = 0;
+    $path = dirname($real_path);
+    if ($path !== false && $path !== '' && file_exists($path)) {
+        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
+            $bytesTotal += $object->getSize();
+        }
+    }
+    return $bytesTotal;
 }
 
 class Event implements JsonSerializable
@@ -44,7 +59,7 @@ class Event implements JsonSerializable
         try {
             $this->scanParts($path);
         } catch (Exception $e) {
-            exit("Error reading parts of Event! ".$e->getMessage());
+            exit("Error reading parts of Event! " . $e->getMessage());
         }
     }
 
@@ -81,6 +96,15 @@ class Event implements JsonSerializable
     }
 
     /**
+     * @return array
+     */
+    public function getFileSources(): array
+    {
+        return $this->fileSources;
+    }
+
+
+    /**
      * @throws Exception
      */
     private function scanParts(string $path): void
@@ -93,8 +117,10 @@ class Event implements JsonSerializable
                 $part_num = (int)$groups[5][0];
                 $this->date = new JsonDateTime($date); //date_format(new DateTime($date), 'Y-m-d H:m:s');
                 $realpath = realpath($path . '/' . $file);
+                $size = get_dir_size($realpath);
                 $rel_path = get_url_path($realpath);
                 $this->fileSources[0]->addEventFile($rel_path, $part_num);
+                $this->fileSources[0]->setFileSize($size);
             }
         }
 //        var_dump($this->fileSource);
@@ -102,6 +128,6 @@ class Event implements JsonSerializable
 
     public function jsonSerialize(): object
     {
-        return (object) get_object_vars($this);
+        return (object)get_object_vars($this);
     }
 }
