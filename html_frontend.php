@@ -11,24 +11,29 @@ function display_html_events(array $events): void
         <link rel="stylesheet" href="styles.css"/>
     </head>
     <body>
+
     <h1>Football Matches</h1>
+    <div id="total-container">
+        <p style="font-weight: bolder;">Total:</p>
+        <p><?php echo count($events); ?></p>
+    </div>
     <div class="matches-container">
         <?php foreach ($events as $event): ?>
             <div class="match-card">
                 <div class="competition-title-container">
                     <p class="competition-title"><?php echo $event->getCompetition()->getName(); ?></p>
-                    <p><?php echo date_format($event->getTimestamp(), 'm/d/y'); ?></p>
+                    <p><?php echo date_format($event->getDate(), 'm/d/y'); ?></p>
                 </div>
                 <div class="teams-container">
-                    <p class="team home"><?php echo $event->getHome()->getName(); ?></p>
+                    <p class="team home"><?php echo $event->getHomeTeam()->getName(); ?></p>
                     <p style="font-weight: bold;">vs.</p>
-                    <p class="team away"><?php echo $event->getAway()->getName(); ?></p>
+                    <p class="team away"><?php echo $event->getAwayTeam()->getName(); ?></p>
                 </div>
                 <div class="parts-container">
-                    <?php foreach ($event->getParts() as $part): ?>
-                        <a href="<?php echo $part; ?>">
+                    <?php foreach ($event->getFileSources()[0]->getEventFiles() as $eventFile): ?>
+                        <a href="<?php echo $eventFile; ?>">
                             <?php
-                            $pathinfo = pathinfo($part);
+                            $pathinfo = pathinfo($eventFile);
                             echo $pathinfo['basename'];
                             ?>
                         </a>

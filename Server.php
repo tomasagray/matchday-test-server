@@ -6,7 +6,7 @@ namespace matchday;
 class Server
 {
     public const DATA_PATH = 'data';
-    public const DIR_PATTERN = '/^([\w ]+) \- ([\w ]+) vs. ([\w ]+)$/';
+    public const DIR_PATTERN = '/^([\w ]+)_\-_([\w ]+)_vs._([\w ]+)$/';
     private array $events;
 
     public function scan_data_dir(): void
