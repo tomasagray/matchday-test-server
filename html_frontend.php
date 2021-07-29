@@ -46,4 +46,4 @@ function display_html_events(array $events): void
     </html>
     <?php
 }
-?>
+

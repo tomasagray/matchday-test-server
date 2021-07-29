@@ -17,7 +17,9 @@ function get_url_path($file_path): string
     $pathinfo = pathinfo(realpath(__FILE__));
     $path_root = $pathinfo['dirname'];
     $path = str_replace(array($path_root, DIRECTORY_SEPARATOR), array('', '/'), $file_path);
-    $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['CONTEXT_PREFIX'];
+    $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':'
+            . $_SERVER['SERVER_PORT'] . $_SERVER['CONTEXT_PREFIX'] . ''
+            . dirname($_SERVER['SCRIPT_NAME']);
     return $url . $path;
 }
 
@@ -25,7 +27,7 @@ function get_dir_size($real_path): int
 {
     $bytesTotal = 0;
     $path = dirname($real_path);
-    if ($path !== false && $path !== '' && file_exists($path)) {
+    if ($path !== '' && file_exists($path)) {
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
             $bytesTotal += $object->getSize();
         }
@@ -35,7 +37,7 @@ function get_dir_size($real_path): int
 
 class Event implements JsonSerializable
 {
-    private const PART_PATTERN = '/(\d+)-(\w+)-(\w+)-(\w+)_(\d{1})(-?\d*).(\w+)/';
+    private const PART_PATTERN = '/(\d+)-(\w+)-(\w+)-(\w+)_([\w]*)(-?[\w]*)(\w*)\.(\w+)/';
 
     private Competition $competition;
     private Team $homeTeam;
@@ -48,7 +50,7 @@ class Event implements JsonSerializable
      * @param Competition $competition
      * @param Team $home
      * @param Team $away
-     * @param DateTime $timestamp
+     * @param string $path
      */
     public function __construct(Competition $competition, Team $home, Team $away, string $path)
     {
@@ -123,7 +125,6 @@ class Event implements JsonSerializable
                 $this->fileSources[0]->setFileSize($size);
             }
         }
-//        var_dump($this->fileSource);
     }
 
     public function jsonSerialize(): object
