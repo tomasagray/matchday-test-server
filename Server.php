@@ -3,21 +3,27 @@
 namespace matchday;
 
 
+use JsonException;
+
 class Server
 {
     public const DATA_PATH = 'data';
     public const DIR_PATTERN = '/^([\w ]+)_\-_([\w\- ]+)_vs._([\w\-_]+)$/';
-    private array $events;
+    public const SCAN_LOG_FILE = "/var/www/html/matches/scan-data.log";
+    private array $events = [];
 
     /**
      * Scan the specified data directory for match videos
+     * @throws JsonException
      */
     public function scan_data_dir(): void
     {
         $path = realpath(self::DATA_PATH);
+        $this->write_log("Starting scan of: ".$path."...\n");
         $items = scandir($path);
         if ($items !== false) {
             foreach ($items as $item) {
+                $this->write_log( "Scanned file: " . $item."\n");
                 $event_path = (realpath($path . '/' . $item));
                 $event = $this->get_event_data($event_path);
                 if ($this->is_event($event)) {
@@ -25,6 +31,8 @@ class Server
                 }
             }
         }
+        $this->write_log("Event count = ".count($this->events)."\n");
+        $this->write_log("Scan done.\n\n");
     }
 
     /**
@@ -38,6 +46,7 @@ class Server
     /**
      * @param $path string path containing match video data
      * @return Event|null An Event object, if the path matched
+     * @throws JsonException
      */
     private function get_event_data(string $path): ?Event
     {
@@ -50,11 +59,14 @@ class Server
                 $competition = str_replace("_", " ", $groups[1][0]);
                 $homeTeam = str_replace("_", " ", $groups[2][0]);
                 $awayTeam = str_replace("_", " ", $groups[3][0]);
-                return new Event(
+                $event = new Event(
                     new Competition($competition),
                     new Team($homeTeam),
                     new Team($awayTeam),
                     $path);
+                $log_data = "Read event data: " . json_encode($event, JSON_THROW_ON_ERROR)."\n";
+                $this->write_log($log_data);
+                return $event;
             }
         }
         return null;
@@ -67,5 +79,12 @@ class Server
     private function is_event(?object $event): bool
     {
         return $event instanceof Event;
+    }
+
+    private function write_log(string $data): void
+    {
+        $date = new \DateTime();
+        $timestamp = '['.$date->getTimeStamp().'] ';
+        file_put_contents(self::SCAN_LOG_FILE, $timestamp.$data, FILE_APPEND);
     }
 }

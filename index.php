@@ -1,4 +1,5 @@
 <?php
+
 namespace matchday;
 
 use JetBrains\PhpStorm\Pure;
@@ -23,11 +24,12 @@ require_once 'html_frontend.php';
 
 // Initialize server
 $server = new Server();
-$server->scan_data_dir();
-$events = $server->getEvents();
-uasort($events, 'matchday\sort_events');
-
 try {
+    $server->scan_data_dir();
+
+    $events = $server->getEvents();
+    uasort($events, 'matchday\sort_events');
+
     if (isset($_GET['format'])) {
         $format = $_GET['format'];
         if ($format === 'json') {
