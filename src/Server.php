@@ -8,13 +8,14 @@ class Server
 {
     public const DATA_PATH = 'data';
     public const DIR_PATTERN = '/^([\w ]+)_-_([\w\- ]+)_vs._([\w\-_]+)$/';
-    public const SCAN_LOG_FILE = "/var/www/html/matches/scan-data.log";
+    public string $logFile;
     private array $events = [];
     private object $config;
 
     public function __construct()
     {
         try {
+            $this->logFile = dirname(__DIR__) . "/log/scan-data.log";
             $configData = file_get_contents(__DIR__ . "/config.json");
             if (!$configData) {
                 $configData = "{}";
@@ -99,7 +100,7 @@ class Server
         $date = new \DateTime();
         $timestamp = '[' . $date->getTimeStamp() . '] ';
         if ($this->config->loggingEnabled) {
-            file_put_contents(self::SCAN_LOG_FILE, $timestamp . $data, FILE_APPEND);
+            file_put_contents($this->logFile, $timestamp . $data, FILE_APPEND);
         }
     }
 }

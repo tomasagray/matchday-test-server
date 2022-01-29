@@ -21,7 +21,7 @@ function get_url_path($file_path): string
     $path_root = $pathinfo['dirname'];
     $path = str_replace(array($path_root, DIRECTORY_SEPARATOR), array('', '/'), $file_path);
     $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':'
-            . $_SERVER['SERVER_PORT'] . $_SERVER['CONTEXT_PREFIX'] . ''
+            . $_SERVER['SERVER_PORT'] . $_SERVER['CONTEXT_PREFIX']
             . dirname($_SERVER['SCRIPT_NAME']);
     return $url . $path;
 }
