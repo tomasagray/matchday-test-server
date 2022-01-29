@@ -12,7 +12,7 @@ class HtmlFrontEnd
         <html lang="en">
         <head>
             <title>Test Football Match Server</title>
-            <link rel="stylesheet" href="<?php echo dirname($_SERVER['REQUEST_URI']); ?>/styles.css"/>
+            <link rel="stylesheet" href="<?php echo dirname($_SERVER['REQUEST_URI']); ?>styles.css"/>
         </head>
         <body>
 
