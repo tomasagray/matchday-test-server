@@ -1,16 +1,29 @@
 <?php
 
-namespace matchday;
-
+namespace Matchday\TestServer;
 
 use JsonException;
 
 class Server
 {
     public const DATA_PATH = 'data';
-    public const DIR_PATTERN = '/^([\w ]+)_\-_([\w\- ]+)_vs._([\w\-_]+)$/';
+    public const DIR_PATTERN = '/^([\w ]+)_-_([\w\- ]+)_vs._([\w\-_]+)$/';
     public const SCAN_LOG_FILE = "/var/www/html/matches/scan-data.log";
     private array $events = [];
+    private object $config;
+
+    public function __construct()
+    {
+        try {
+            $configData = file_get_contents(__DIR__ . "/config.json");
+            if (!$configData) {
+                $configData = "{}";
+            }
+            $this->config = json_decode($configData, false, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            var_dump($e);
+        }
+    }
 
     /**
      * Scan the specified data directory for match videos
@@ -19,11 +32,11 @@ class Server
     public function scan_data_dir(): void
     {
         $path = realpath(self::DATA_PATH);
-        $this->write_log("Starting scan of: ".$path."...\n");
+        $this->write_log("Starting scan of: " . $path . "...\n");
         $items = scandir($path);
         if ($items !== false) {
             foreach ($items as $item) {
-                $this->write_log( "Scanned file: " . $item."\n");
+                $this->write_log("Scanned file: " . $item . "\n");
                 $event_path = (realpath($path . '/' . $item));
                 $event = $this->get_event_data($event_path);
                 if ($this->is_event($event)) {
@@ -31,7 +44,7 @@ class Server
                 }
             }
         }
-        $this->write_log("Event count = ".count($this->events)."\n");
+        $this->write_log("Event count = " . count($this->events) . "\n");
         $this->write_log("Scan done.\n\n");
     }
 
@@ -64,7 +77,7 @@ class Server
                     new Team($homeTeam),
                     new Team($awayTeam),
                     $path);
-                $log_data = "Read event data: " . json_encode($event, JSON_THROW_ON_ERROR)."\n";
+                $log_data = "Read event data: " . json_encode($event, JSON_THROW_ON_ERROR) . "\n";
                 $this->write_log($log_data);
                 return $event;
             }
@@ -84,7 +97,9 @@ class Server
     private function write_log(string $data): void
     {
         $date = new \DateTime();
-        $timestamp = '['.$date->getTimeStamp().'] ';
-        file_put_contents(self::SCAN_LOG_FILE, $timestamp.$data, FILE_APPEND);
+        $timestamp = '[' . $date->getTimeStamp() . '] ';
+        if ($this->config->loggingEnabled) {
+            file_put_contents(self::SCAN_LOG_FILE, $timestamp . $data, FILE_APPEND);
+        }
     }
 }
