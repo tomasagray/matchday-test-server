@@ -17,7 +17,7 @@ use RecursiveIteratorIterator;
 
 function get_url_path($file_path): string
 {
-    $pathinfo = pathinfo(realpath(__FILE__));
+    $pathinfo = pathinfo(dirname(__DIR__ . "/.."));
     $path_root = $pathinfo['dirname'];
     $path = str_replace(array($path_root, DIRECTORY_SEPARATOR), array('', '/'), $file_path);
     $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':'
