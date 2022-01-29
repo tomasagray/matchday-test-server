@@ -1,0 +1,24 @@
+{
+  "name": "tom/matchday",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Tomas",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Matchday\\TestServer\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "matchday\\Tests\\": "tests/"
+    }
+  }
+}

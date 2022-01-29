@@ -1,8 +1,7 @@
 <?php
-namespace matchday;
 
+namespace Matchday\TestServer;
 
-use DateTime;
 use JsonSerializable;
 
 class Team implements JsonSerializable
@@ -16,7 +15,7 @@ class Team implements JsonSerializable
      */
     public function __construct(string $name)
     {
-        $this->teamId = md5(date_format(new DateTime(), 'c') . $name);
+        $this->teamId = UUID::create();
         $this->name = $name;
     }
 
@@ -38,6 +37,6 @@ class Team implements JsonSerializable
 
     public function jsonSerialize(): object
     {
-        return (object) get_object_vars($this);
+        return (object)get_object_vars($this);
     }
 }

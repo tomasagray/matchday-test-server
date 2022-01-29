@@ -1,7 +1,7 @@
 <?php
 
 
-namespace matchday;
+namespace Matchday\TestServer;
 
 require_once 'JsonDateTime.php';
 
@@ -9,6 +9,9 @@ use DateTime;
 use Exception;
 use FilesystemIterator;
 use JsonSerializable;
+use Matchday\TestServer\Competition;
+use Matchday\TestServer\JsonDateTime;
+use Matchday\TestServer\Team;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 

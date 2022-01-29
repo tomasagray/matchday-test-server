@@ -1,6 +1,6 @@
 <?php
 
-namespace matchday;
+namespace Matchday\TestServer;
 
 use DateTime;
 use JsonSerializable;
@@ -16,7 +16,7 @@ class Competition implements JsonSerializable
      */
     public function __construct(string $name)
     {
-        $this->competitionId = md5(date_format(new DateTime(), 'c') . $name);
+        $this->competitionId = UUID::create();
         $this->name = $name;
     }
 

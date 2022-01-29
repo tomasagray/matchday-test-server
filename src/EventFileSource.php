@@ -1,6 +1,6 @@
 <?php
 
-namespace matchday;
+namespace Matchday\TestServer;
 
 use DateTime;
 use JsonSerializable;
@@ -22,7 +22,7 @@ class EventFileSource implements JsonSerializable
      */
     public function __construct()
     {
-        $this->eventFileSrcId = md5(date_format(new DateTime(), 'c') . mt_rand());
+        $this->eventFileSrcId = UUID::create();
     }
 
     public function addEventFile($eventFile, $part): void
