@@ -18,7 +18,7 @@ class HtmlFrontEnd
 
         <h1>Football Matches</h1>
         <div id="total-container">
-            <p style="font-weight: bolder;">Total:</p>
+            <p style="font-weight: bolder;">Total Events:</p>
             <p><?php echo count($events); ?></p>
         </div>
         <div class="matches-container">

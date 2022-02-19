@@ -8,6 +8,11 @@ body {
     flex-wrap: wrap;
 }
 
+#total-container p {
+    padding: 1rem;
+    background-color: whitesmoke;
+}
+
 .matches-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
