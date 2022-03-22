@@ -2,6 +2,7 @@
 
 namespace Matchday\TestServer;
 
+use DateTime;
 use JsonException;
 
 class Server
@@ -97,7 +98,7 @@ class Server
 
     private function write_log(string $data): void
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $timestamp = '[' . $date->getTimeStamp() . '] ';
         if ($this->config->loggingEnabled) {
             file_put_contents($this->logFile, $timestamp . $data, FILE_APPEND);

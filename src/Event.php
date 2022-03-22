@@ -9,9 +9,6 @@ use DateTime;
 use Exception;
 use FilesystemIterator;
 use JsonSerializable;
-use Matchday\TestServer\Competition;
-use Matchday\TestServer\JsonDateTime;
-use Matchday\TestServer\Team;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -21,8 +18,8 @@ function get_url_path($file_path): string
     $path_root = $pathinfo['dirname'];
     $path = str_replace(array($path_root, DIRECTORY_SEPARATOR), array('', '/'), $file_path);
     $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':'
-            . $_SERVER['SERVER_PORT'] . $_SERVER['CONTEXT_PREFIX']
-            . dirname($_SERVER['SCRIPT_NAME']);
+        . $_SERVER['SERVER_PORT'] . $_SERVER['CONTEXT_PREFIX']
+        . dirname($_SERVER['SCRIPT_NAME']);
     return $url . $path;
 }
 
@@ -42,10 +39,13 @@ class Event implements JsonSerializable
 {
     private const PART_PATTERN = '/(\d+)-(\w+)-(\w+)-(\w+)_([\w]*)(-?[\w]*)(\w*)\.(\w+)/';
 
+    private string $eventId;
     private Competition $competition;
     private Team $homeTeam;
     private Team $awayTeam;
-    private JsonDateTime $date;
+    private Season $season;
+    private Fixture $fixture;
+    private LocalDateTime $date;
     private array $fileSources;
 
     /**
@@ -57,15 +57,26 @@ class Event implements JsonSerializable
      */
     public function __construct(Competition $competition, Team $home, Team $away, string $path)
     {
+        $this->eventId = UUID::create();
         $this->competition = $competition;
         $this->homeTeam = $home;
         $this->awayTeam = $away;
-        $this->fileSources[] = new EventFileSource();
+        $this->season = new Season();
+        $this->fixture = new Fixture();
+        $this->fileSources[] = new VideoFileSource();
         try {
             $this->scanParts($path);
         } catch (Exception $e) {
             exit("Error reading parts of Event! " . $e->getMessage());
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEventId(): string
+    {
+        return $this->eventId;
     }
 
     /**
@@ -93,9 +104,25 @@ class Event implements JsonSerializable
     }
 
     /**
-     * @return DateTime
+     * @return Season
      */
-    public function getDate(): DateTime
+    public function getSeason(): Season
+    {
+        return $this->season;
+    }
+
+    /**
+     * @return Fixture
+     */
+    public function getFixture(): Fixture
+    {
+        return $this->fixture;
+    }
+
+    /**
+     * @return LocalDateTime
+     */
+    public function getDate(): LocalDateTime
     {
         return $this->date;
     }
@@ -108,7 +135,6 @@ class Event implements JsonSerializable
         return $this->fileSources;
     }
 
-
     /**
      * @throws Exception
      */
@@ -118,13 +144,12 @@ class Event implements JsonSerializable
         foreach ($files as $file) {
             $groups = array();
             if (preg_match_all(self::PART_PATTERN, $file, $groups) > 0) {
-                $date = $groups[1][0];
+                $this->date = LocalDateTime::fromString($groups[1][0]);
                 $part_num = (int)$groups[5][0];
-                $this->date = new JsonDateTime($date); //date_format(new DateTime($date), 'Y-m-d H:m:s');
                 $realpath = realpath($path . '/' . $file);
                 $size = get_dir_size($realpath);
                 $rel_path = get_url_path($realpath);
-                $this->fileSources[0]->addEventFile($rel_path, $part_num);
+                $this->fileSources[0]->addVideoFile($rel_path, $part_num);
                 $this->fileSources[0]->setFileSize($size);
             }
         }
@@ -133,5 +158,17 @@ class Event implements JsonSerializable
     public function jsonSerialize(): object
     {
         return (object)get_object_vars($this);
+    }
+
+    /**
+     * @param $groups
+     * @return DateTime|false
+     */
+    private function getDateTime($groups): false|DateTime
+    {
+        $date = $groups;
+        $date = substr_replace($date, "-", 4, 0);
+        $date = substr_replace($date, "-", 7, 0);
+        return DateTime::createFromFormat('Y-m-d', $date);
     }
 }

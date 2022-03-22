@@ -2,7 +2,6 @@
 
 namespace Matchday\TestServer;
 
-use DateTime;
 use JsonSerializable;
 
 define('PARTS', [
@@ -10,41 +9,42 @@ define('PARTS', [
     'Trophy Ceremony', 'Post-Match'
 ]);
 
-class EventFileSource implements JsonSerializable
+class VideoFileSource implements JsonSerializable
 {
 
-    private string $eventFileSrcId;
-    private array $eventFiles;
+    private string $fileSrcId;
+    private array $videoFilePacks;
     private int $fileSize;
 
     /**
-     * EventFileSource constructor.
+     * VideoFileSource constructor.
      */
     public function __construct()
     {
-        $this->eventFileSrcId = UUID::create();
+        $this->fileSrcId = UUID::create();
+        $this->videoFilePacks = [new VideoFilePack()];
     }
 
-    public function addEventFile($eventFile, $part): void
+    public function addVideoFile($videoFile, $part): void
     {
         $name = PARTS[$part];
-        $this->eventFiles[$name] = $eventFile;
+        $this->videoFilePacks[0]->addVideoFile($videoFile, $part);
     }
 
     /**
      * @return string
      */
-    public function getEventFileSrcId(): string
+    public function getFileSrcId(): string
     {
-        return $this->eventFileSrcId;
+        return $this->fileSrcId;
     }
 
     /**
      * @return array
      */
-    public function getEventFiles(): array
+    public function getVideoFilePacks(): array
     {
-        return $this->eventFiles;
+        return $this->videoFilePacks;
     }
 
     /**
@@ -68,10 +68,10 @@ class EventFileSource implements JsonSerializable
      */
     public function jsonSerialize(): object
     {
-        $files_bk = $this->eventFiles;
-        $this->eventFiles = array_values($this->eventFiles);
+        $files_bk = $this->videoFilePacks;
+        $this->videoFilePacks = array_values($this->videoFilePacks);
         $serialized = (object)get_object_vars($this);
-        $this->eventFiles = $files_bk;
+        $this->videoFilePacks = $files_bk;
         return $serialized;
     }
 }

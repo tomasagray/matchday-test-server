@@ -25,13 +25,13 @@ class HtmlFrontEnd
             <?php foreach ($events as $event): ?>
                 <div class="match-card">
                     <div class="competition-title-container">
-                        <p class="competition-title"><?php echo $event->getCompetition()->getName(); ?></p>
+                        <p class="competition-title"><?php echo $event->getCompetition()->getProperName(); ?></p>
                         <p><?php echo date_format($event->getDate(), 'm/d/y'); ?></p>
                     </div>
                     <div class="teams-container">
-                        <p class="team home"><?php echo $event->getHomeTeam()->getName(); ?></p>
+                        <p class="team home"><?php echo $event->getHomeTeam()->getProperName(); ?></p>
                         <p style="font-weight: bold;">vs.</p>
-                        <p class="team away"><?php echo $event->getAwayTeam()->getName(); ?></p>
+                        <p class="team away"><?php echo $event->getAwayTeam()->getProperName(); ?></p>
                     </div>
                     <div class="parts-container">
                         <?php foreach ($event->getFileSources()[0]->getEventFiles() as $eventFile): ?>
