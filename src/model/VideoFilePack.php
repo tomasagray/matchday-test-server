@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchday\TestServer;
+namespace Matchday\TestServer\model;
 
 use JsonSerializable;
 
@@ -25,13 +25,7 @@ class VideoFilePack implements JsonSerializable
 
     public function addVideoFile($file, $part): void
     {
-        $partId = "<>";
-        if ($part === 1) {
-            $partId = "FIRST_HALF";
-        } elseif ($part === 2) {
-            $partId = "SECOND_HALF";
-        }
-        $this->videoFiles[$partId] = new VideoFile($file, $partId);
+        $this->videoFiles[$part] = new VideoFile($file, $part);
     }
 
     /**

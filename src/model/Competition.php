@@ -1,31 +1,31 @@
 <?php
 
-namespace Matchday\TestServer;
+namespace Matchday\TestServer\model;
 
 use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 
-class Team implements JsonSerializable
+class Competition implements JsonSerializable
 {
-    private string $teamId;
+    private string $competitionId;
     private ProperName $properName;
 
     /**
-     * Team constructor.
+     * Competition constructor.
      * @param string $name
      */
     public function __construct(string $name)
     {
-        $this->teamId = UUID::create();
+        $this->competitionId = UUID::create();
         $this->properName = new ProperName($name);
     }
 
     /**
      * @return string
      */
-    public function getTeamId(): string
+    public function getCompetitionId(): string
     {
-        return $this->teamId;
+        return $this->competitionId;
     }
 
     /**

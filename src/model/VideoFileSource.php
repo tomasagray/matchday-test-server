@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchday\TestServer;
+namespace Matchday\TestServer\model;
 
 use JsonSerializable;
 
@@ -28,7 +28,7 @@ class VideoFileSource implements JsonSerializable
     public function addVideoFile($videoFile, $part): void
     {
         $name = PARTS[$part];
-        $this->videoFilePacks[0]->addVideoFile($videoFile, $part);
+        $this->videoFilePacks[0]->addVideoFile($videoFile, $name);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Matchday\TestServer;
+namespace Matchday\TestServer\model;
 
 use DateTime;
 use JsonSerializable;

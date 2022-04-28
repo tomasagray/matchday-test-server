@@ -1,11 +1,10 @@
 <?php
 
 
-namespace Matchday\TestServer;
+namespace Matchday\TestServer\model;
 
 require_once 'JsonDateTime.php';
 
-use DateTime;
 use Exception;
 use FilesystemIterator;
 use JsonSerializable;
@@ -14,12 +13,15 @@ use RecursiveIteratorIterator;
 
 function get_url_path($file_path): string
 {
-    $pathinfo = pathinfo(dirname(__DIR__ . "/.."));
-    $path_root = $pathinfo['dirname'];
+    $pathinfo = pathinfo(dirname(__DIR__ . "/matchday-test-server"));
+    $path_root = dirname($pathinfo['dirname'] . "../");
     $path = str_replace(array($path_root, DIRECTORY_SEPARATOR), array('', '/'), $file_path);
     $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':'
         . $_SERVER['SERVER_PORT'] . $_SERVER['CONTEXT_PREFIX']
         . dirname($_SERVER['SCRIPT_NAME']);
+    if (str_ends_with($url, '/')) {
+        $url = substr($url, 0, -1);
+    }
     return $url . $path;
 }
 
@@ -37,7 +39,7 @@ function get_dir_size($real_path): int
 
 class Event implements JsonSerializable
 {
-    private const PART_PATTERN = '/(\d+)-(\w+)-(\w+)-(\w+)_([\w]*)(-?[\w]*)(\w*)\.(\w+)/';
+    private const PART_PATTERN = '/(\d+)-(\w+)-(\w+)-(\w+)_(\w*)(-?\w*)(\w*)\.(\w+)/';
 
     private string $eventId;
     private Competition $competition;
@@ -122,7 +124,7 @@ class Event implements JsonSerializable
     /**
      * @return LocalDateTime
      */
-    public function getDate(): LocalDateTime
+    public function getDateTime(): LocalDateTime
     {
         return $this->date;
     }
@@ -158,17 +160,5 @@ class Event implements JsonSerializable
     public function jsonSerialize(): object
     {
         return (object)get_object_vars($this);
-    }
-
-    /**
-     * @param $groups
-     * @return DateTime|false
-     */
-    private function getDateTime($groups): false|DateTime
-    {
-        $date = $groups;
-        $date = substr_replace($date, "-", 4, 0);
-        $date = substr_replace($date, "-", 7, 0);
-        return DateTime::createFromFormat('Y-m-d', $date);
     }
 }

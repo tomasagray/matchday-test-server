@@ -4,6 +4,9 @@ namespace Matchday\TestServer;
 
 use DateTime;
 use JsonException;
+use Matchday\TestServer\model\Competition;
+use Matchday\TestServer\model\Event;
+use Matchday\TestServer\model\Team;
 
 class Server
 {
@@ -79,8 +82,7 @@ class Server
                     new Team($homeTeam),
                     new Team($awayTeam),
                     $path);
-                $log_data = "Read event data: " . json_encode($event, JSON_THROW_ON_ERROR) . "\n";
-                $this->write_log($log_data);
+                $this->write_log("Read event data: " . json_encode($event, JSON_THROW_ON_ERROR) . "\n");
                 return $event;
             }
         }

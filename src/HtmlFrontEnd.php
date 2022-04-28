@@ -3,6 +3,8 @@
 namespace Matchday\TestServer;
 
 
+use Matchday\TestServer\model\Event;
+
 class HtmlFrontEnd
 {
     public static function display_html_events(array $events): void
@@ -22,32 +24,47 @@ class HtmlFrontEnd
             <p><?php echo count($events); ?></p>
         </div>
         <div class="matches-container">
-            <?php foreach ($events as $event): ?>
-                <div class="match-card">
-                    <div class="competition-title-container">
-                        <p class="competition-title"><?php echo $event->getCompetition()->getProperName(); ?></p>
-                        <p><?php echo date_format($event->getDate(), 'm/d/y'); ?></p>
-                    </div>
-                    <div class="teams-container">
-                        <p class="team home"><?php echo $event->getHomeTeam()->getProperName(); ?></p>
-                        <p style="font-weight: bold;">vs.</p>
-                        <p class="team away"><?php echo $event->getAwayTeam()->getProperName(); ?></p>
-                    </div>
-                    <div class="parts-container">
-                        <?php foreach ($event->getFileSources()[0]->getEventFiles() as $eventFile): ?>
-                            <a href="<?php echo $eventFile; ?>">
-                                <?php
-                                $pathinfo = pathinfo($eventFile);
-                                echo $pathinfo['basename'];
-                                ?>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+            <?php foreach ($events as $event): ?><?php self::print_event($event); ?><?php endforeach; ?>
         </div>
         </body>
         </html>
+        <?php
+    }
+
+    private static function print_event(Event $event): void
+    {
+        ?>
+        <div class="match-card">
+            <div class="competition-title-container">
+                <p class="competition-title">
+                    <?php echo $event->getCompetition()->getProperName(); ?>
+                </p>
+                <p>
+                    <?php
+                    $date = $event->getDateTime()->getDate();
+                    echo "{$date->getMonth()}/{$date->getDay()}/{$date->getYear()}";
+                    ?>
+                </p>
+            </div>
+            <div class="teams-container">
+                <p class="team home"><?php echo $event->getHomeTeam()->getProperName(); ?></p>
+                <p style="font-weight: bold;">vs.</p>
+                <p class="team away"><?php echo $event->getAwayTeam()->getProperName(); ?></p>
+            </div>
+            <div class="parts-container">
+                <?php
+                foreach ($event->getFileSources()[0]->getVideoFilePacks()[0]->getVideoFiles() as $videoFile):
+                    $url = $videoFile->getExternalUrl();
+                    ?>
+                    <a href="<?php echo $url; ?>">
+                        <?php
+                        $pathinfo = pathinfo($url);
+                        echo $pathinfo['basename'];
+                        ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
         <?php
     }
 }

@@ -4,15 +4,15 @@ namespace Matchday\TestServer\TestServer;
 
 use JetBrains\PhpStorm\Pure;
 use JsonException;
-use Matchday\TestServer\Event;
 use Matchday\TestServer\HtmlFrontEnd;
+use Matchday\TestServer\model\Event;
 use Matchday\TestServer\Server;
 
 #[Pure] function sort_events(Event $ea, Event $eb): int
 {
-    $ea_time = $ea->getDate();
-    $eb_time = $eb->getDate();
-    if ($ea_time == $eb_time) {
+    $ea_time = $ea->getDateTime();
+    $eb_time = $eb->getDateTime();
+    if ($ea_time === $eb_time) {
         return 0;
     }
     return ($ea_time < $eb_time) ? 1 : -1;
