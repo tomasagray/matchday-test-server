@@ -4,6 +4,11 @@ namespace Matchday\TestServer\model;
 
 use JsonSerializable;
 
+define('TITLES', [
+    'Pre-Match', '1st Half', '2nd Half', 'Extra Time/Penalties',
+    'Trophy Ceremony', 'Post-Match'
+]);
+
 class VideoFile implements JsonSerializable
 {
     private string $fileId;
@@ -12,13 +17,13 @@ class VideoFile implements JsonSerializable
 
     /**
      * @param string $url
-     * @param string $title
+     * @param string $part
      */
-    public function __construct(string $url, string $title)
+    public function __construct(string $url, string $part)
     {
         $this->fileId = UUID::create();
         $this->externalUrl = $url;
-        $this->title = $title;
+        $this->title = TITLES[$part];
     }
 
     /**

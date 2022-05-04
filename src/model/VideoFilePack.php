@@ -4,6 +4,15 @@ namespace Matchday\TestServer\model;
 
 use JsonSerializable;
 
+define('PARTS', [
+    'PRE_MATCH',
+    'FIRST_HALF',
+    'SECOND_HALF',
+    'EXTRA_TIME',
+    'TROPHY_CEREMONY',
+    'POST_MATCH'
+]);
+
 class VideoFilePack implements JsonSerializable
 {
     private string $id;
@@ -25,7 +34,8 @@ class VideoFilePack implements JsonSerializable
 
     public function addVideoFile($file, $part): void
     {
-        $this->videoFiles[$part] = new VideoFile($file, $part);
+        $partId = PARTS[$part];
+        $this->videoFiles[$partId] = new VideoFile($file, $part);
     }
 
     /**
