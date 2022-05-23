@@ -8,7 +8,7 @@ use JsonSerializable;
 class Team implements JsonSerializable
 {
     private string $teamId;
-    private ProperName $properName;
+    private ProperName $name;
 
     /**
      * Team constructor.
@@ -17,7 +17,7 @@ class Team implements JsonSerializable
     public function __construct(string $name)
     {
         $this->teamId = UUID::create();
-        $this->properName = new ProperName($name);
+        $this->name = new ProperName($name);
     }
 
     /**
@@ -31,9 +31,9 @@ class Team implements JsonSerializable
     /**
      * @return string
      */
-    #[Pure] public function getProperName(): string
+    #[Pure] public function getName(): string
     {
-        return $this->properName->getName();
+        return $this->name->getName();
     }
 
     public function jsonSerialize(): object

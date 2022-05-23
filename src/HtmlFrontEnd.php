@@ -37,7 +37,7 @@ class HtmlFrontEnd
         <div class="match-card">
             <div class="competition-title-container">
                 <p class="competition-title">
-                    <?php echo $event->getCompetition()->getProperName(); ?>
+                    <?php echo $event->getCompetition()->getName(); ?>
                 </p>
                 <p>
                     <?php
@@ -47,9 +47,9 @@ class HtmlFrontEnd
                 </p>
             </div>
             <div class="teams-container">
-                <p class="team home"><?php echo $event->getHomeTeam()->getProperName(); ?></p>
+                <p class="team home"><?php echo $event->getHomeTeam()->getName(); ?></p>
                 <p style="font-weight: bold;">vs.</p>
-                <p class="team away"><?php echo $event->getAwayTeam()->getProperName(); ?></p>
+                <p class="team away"><?php echo $event->getAwayTeam()->getName(); ?></p>
             </div>
             <div class="parts-container">
                 <?php

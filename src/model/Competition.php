@@ -8,7 +8,7 @@ use JsonSerializable;
 class Competition implements JsonSerializable
 {
     private string $competitionId;
-    private ProperName $properName;
+    private ProperName $name;
 
     /**
      * Competition constructor.
@@ -17,7 +17,7 @@ class Competition implements JsonSerializable
     public function __construct(string $name)
     {
         $this->competitionId = UUID::create();
-        $this->properName = new ProperName($name);
+        $this->name = new ProperName($name);
     }
 
     /**
@@ -31,9 +31,9 @@ class Competition implements JsonSerializable
     /**
      * @return string
      */
-    #[Pure] public function getProperName(): string
+    #[Pure] public function getName(): string
     {
-        return $this->properName->getName();
+        return $this->name->getName();
     }
 
     public function jsonSerialize(): object
