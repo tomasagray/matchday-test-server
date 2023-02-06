@@ -16,7 +16,7 @@ class Fixture implements JsonSerializable
     public function __construct()
     {
         $this->title = "Matchday";
-        $this->fixtureNumber = random_int(1, 34);
+        $this->fixtureNumber = 0;
     }
 
     /**

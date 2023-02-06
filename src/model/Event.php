@@ -153,6 +153,15 @@ class Event implements JsonSerializable
                 $rel_path = get_url_path($realpath);
                 $this->fileSources[0]->addVideoFile($rel_path, $part_num);
                 $this->fileSources[0]->setFileSize($size);
+                $this->fileSources[0]->setChannel("Hal9000");
+                $this->fileSources[0]->setSource("DVB-S2");
+                $this->fileSources[0]->setLanguages("English or Spanish?");
+                $this->fileSources[0]->setResolution("1080p");
+                $this->fileSources[0]->setMediaContainer("TS");
+                $this->fileSources[0]->setBitrate("8");
+                $this->fileSources[0]->setVideoCodec("H.264");
+                $this->fileSources[0]->setAudioCodec("AC3");
+                $this->fileSources[0]->setDuration("90min");
             }
         }
     }

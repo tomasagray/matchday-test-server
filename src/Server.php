@@ -13,6 +13,7 @@ class Server
     public const DATA_PATH = 'data';
     public const DIR_PATTERN = '/^([\w ]+)_-_([\w\- ]+)_vs._([\w\-_]+)$/';
     public string $logFile;
+    private string $scanData;
     private array $events = [];
     private object $config;
 
@@ -20,6 +21,7 @@ class Server
     {
         try {
             $this->logFile = dirname(__DIR__) . "/log/scan-data.log";
+            $this->scanData = dirname(__DIR__) . "/scan.json";
             $configData = file_get_contents(__DIR__ . "/config.json");
             if (!$configData) {
                 $configData = "{}";
@@ -85,6 +87,7 @@ class Server
                 $this->write_log("Read event data: " . json_encode($event, JSON_THROW_ON_ERROR) . "\n");
                 return $event;
             }
+            $this->write_scan_data($this->events);
         }
         return null;
     }
@@ -105,5 +108,24 @@ class Server
         if ($this->config->loggingEnabled) {
             file_put_contents($this->logFile, $timestamp . $data, FILE_APPEND);
         }
+    }
+
+    /**
+     * @throws JsonException
+     */
+    private function write_scan_data(array $data): void
+    {
+        $json = json_encode($data, JSON_THROW_ON_ERROR);
+        file_put_contents($this->scanData, $json, LOCK_EX);
+    }
+
+    /**
+     * @return object
+     * @throws JsonException
+     */
+    public function read_scan_data(): array
+    {
+        $json = file_get_contents($this->scanData);
+        return json_decode($json, false, 512, JSON_THROW_ON_ERROR);
     }
 }

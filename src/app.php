@@ -26,12 +26,10 @@ try {
     $events = $server->getEvents();
     uasort($events, 'Matchday\TestServer\TestServer\sort_events');
 
-    if (isset($_GET['format'])) {
-        $format = $_GET['format'];
-        if ($format === 'json') {
-            $values = array_values($events);
-            echo json_encode($values, JSON_THROW_ON_ERROR);
-        }
+    if (isset($_GET['format']) && $_GET['format'] === 'json') {
+        $values = array_values($events);
+        header('Content-Type: application/json');
+        echo json_encode($values, JSON_THROW_ON_ERROR);
     } else {
         HtmlFrontEnd::display_html_events($events);
     }

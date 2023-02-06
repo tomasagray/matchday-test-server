@@ -15,27 +15,17 @@ define('PARTS', [
 
 class VideoFilePack implements JsonSerializable
 {
-    private string $id;
     private array $videoFiles;
 
     public function __construct()
     {
-        $this->id = UUID::create();
         $this->videoFiles = [];
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
     }
 
     public function addVideoFile($file, $part): void
     {
         $partId = PARTS[$part];
-        $this->videoFiles[$partId] = new VideoFile($file, $part);
+        $this->videoFiles[$partId] = new VideoFile($file, $partId);
     }
 
     /**

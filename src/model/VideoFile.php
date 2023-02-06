@@ -11,7 +11,6 @@ define('TITLES', [
 
 class VideoFile implements JsonSerializable
 {
-    private string $fileId;
     private string $externalUrl;
     private string $title;
 
@@ -21,9 +20,8 @@ class VideoFile implements JsonSerializable
      */
     public function __construct(string $url, string $part)
     {
-        $this->fileId = UUID::create();
         $this->externalUrl = $url;
-        $this->title = TITLES[$part];
+        $this->title = $part; //TITLES[$part];
     }
 
     /**
@@ -32,14 +30,6 @@ class VideoFile implements JsonSerializable
     public function getTitle(): string
     {
         return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFileId(): string
-    {
-        return $this->fileId;
     }
 
     /**
