@@ -14,10 +14,13 @@ class VideoFileSource implements JsonSerializable
     private string $languages;
     private string $resolution;
     private string $mediaContainer;
-    private string $bitrate;
+    private int $videoBitrate;
     private string $videoCodec;
     private string $audioCodec;
+    private int $audioBitrate;
+    private int $audioChannels;
     private string $duration;
+    private int $framerate;
 
     /**
      * VideoFileSource constructor.
@@ -97,11 +100,11 @@ class VideoFileSource implements JsonSerializable
     }
 
     /**
-     * @param string $bitrate
+     * @param string $videoBitrate
      */
-    public function setBitrate(string $bitrate): void
+    public function setVideoBitrate(string $videoBitrate): void
     {
-        $this->bitrate = $bitrate;
+        $this->videoBitrate = $videoBitrate;
     }
 
     /**
@@ -126,6 +129,21 @@ class VideoFileSource implements JsonSerializable
     public function setDuration(string $duration): void
     {
         $this->duration = $duration;
+    }
+
+    public function setFramerate(int $framerate): void
+    {
+        $this->framerate = $framerate;
+    }
+
+    public function setAudioChannels(int $channels): void
+    {
+        $this->audioChannels = $channels;
+    }
+
+    public function setAudioBitrate(int $bitrate)
+    {
+        $this->audioBitrate = $bitrate;
     }
 
     /**

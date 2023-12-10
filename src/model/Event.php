@@ -158,10 +158,13 @@ class Event implements JsonSerializable
                 $this->fileSources[0]->setLanguages("English or Spanish?");
                 $this->fileSources[0]->setResolution("1080p");
                 $this->fileSources[0]->setMediaContainer("TS");
-                $this->fileSources[0]->setBitrate("8");
+                $this->fileSources[0]->setVideoBitrate("8");
                 $this->fileSources[0]->setVideoCodec("H.264");
                 $this->fileSources[0]->setAudioCodec("AC3");
                 $this->fileSources[0]->setDuration("90min");
+                $this->fileSources[0]->setFramerate(25);
+                $this->fileSources[0]->setAudioChannels(2);
+                $this->fileSources[0]->setAudioBitrate(384);
             }
         }
     }
