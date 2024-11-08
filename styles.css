@@ -3,6 +3,12 @@ body {
     padding: 8em;
 }
 
+#sub-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 #total-container {
     display: flex;
     flex-wrap: wrap;
@@ -11,6 +17,15 @@ body {
 #total-container p {
     padding: 1rem;
     background-color: whitesmoke;
+}
+
+#as-json-button {
+    padding: 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
 }
 
 .matches-container {

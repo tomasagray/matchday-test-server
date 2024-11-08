@@ -19,9 +19,19 @@ class HtmlFrontEnd
         <body>
 
         <h1>Football Matches</h1>
-        <div id="total-container">
-            <p style="font-weight: bolder;">Total Events:</p>
-            <p><?php echo count($events); ?></p>
+        <div id="sub-header-container">
+            <div>
+                <div id="total-container">
+                    <p style="font-weight: bolder;">Total Events:</p>
+                    <p><?php echo count($events); ?></p>
+                </div>
+            </div>
+            <div>
+                <form action="" method="get" style="margin: 0;">
+                    <input type="hidden" name="format" value="json"/>
+                    <input id="as-json-button" type="submit" value="As JSON...">
+                </form>
+            </div>
         </div>
         <div class="matches-container">
             <?php foreach ($events as $event): ?><?php self::print_event($event); ?><?php endforeach; ?>
@@ -58,8 +68,8 @@ class HtmlFrontEnd
                     ?>
                     <a href="<?php echo $url; ?>">
                         <?php
-                        $pathinfo = pathinfo($url);
-                        echo $pathinfo['basename'];
+                        $path_info = pathinfo($url);
+                        echo $path_info['basename'];
                         ?>
                     </a>
                 <?php endforeach; ?>
